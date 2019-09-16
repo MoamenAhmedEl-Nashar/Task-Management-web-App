@@ -6,6 +6,7 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = '__all__'
+        
 
 class GoalForm(forms.ModelForm):
     class Meta:

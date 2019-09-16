@@ -1,19 +1,52 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.models import User, Group
+from rest_framework import viewsets
 import datetime
 from .models import *
 from .forms import *
+from .serializers import *
 # Create your views here.
 
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+
+class TaskViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
 def home(request):
+    tasks = Task.objects.all()
+    days = Day.objects.all()
+    goals = Goal.objects.all()
+    print(goals)
+    return render(request, "home_tasks.html", {"tasks":tasks, "days":days, "goals":goals})
+
+def add_task(request):
     if request.method == 'POST':
         # Create a form instance and populate it with data from the request (binding):
         form = TaskForm(request.POST)
         if form.is_valid():
             form.save()
-    tasks = Task.objects.all()
-    days = Day.objects.all()
-    goals = Goal.objects.all()
-    return render(request, "home_tasks.html", {"tasks":tasks, "days":days, "goals":goals})
+        else:
+            print("form not valid")
+            print(form.errors)
+            print(request.POST.get('task_goal'))
+    return redirect('/')             # Finally, redirect to the homepage.
 
 def add_goal(request):
     if request.method == 'POST':
