@@ -11,7 +11,7 @@
 		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<!-- jQuery CDN from google !-->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	
+
 	<title>Tasks App</title>
 </head>
 
@@ -19,32 +19,38 @@
 
 	<div class="alert alert-primary" style="text-align: center;">
 		<h1>Tasks App</h1>
+		<form action="history/" method='POST'>
+			{% csrf_token %}
+			<button type="submit" value="submit" style=" text-decoration: none;" class="btn btn-link">history</button>
+		</form>
 	</div>
+	
 
 	<!--------------------------------- daily tasks ----------------------------------------------->
 	<div class="alert alert-primary h-100 align-items-center" style="text-align: center;">
 		<div class="row">
-			{% for day in days %}
-				<div class="col">
-					<p>
-						<a class="btn btn-primary" data-toggle="collapse" href="#day_{{forloop.counter}}" role="button"
-							aria-expanded="false" aria-controls="multiCollapseExample1">{{day.date}}</a>
-					</p>
+			{% if today %}
+			<div class="col">
+				<p>
+					<a class="btn btn-primary" data-toggle="collapse" href="#day_{{forloop.counter}}" role="button"
+						aria-expanded="false" aria-controls="multiCollapseExample1">{{today.date}}</a>
+				</p>
 
-					<div class="collapse multi-collapse" id="day_{{forloop.counter}}">
-						<div class="card-body">
-							<h5 class="card-title">{{day.date}}</h5>
-							{% for task in day.daily_tasks.all %}
-							<p class="card-text">
-								<ul class="list-group list-group-flush">
-									<li class="list-group-item {% if task.task_done %} bg-success {% endif %}">{{task.task_name}}</li>
-								</ul>
-							</p>
-							{% endfor %}
-						</div>
+				<div class="collapse multi-collapse" id="day_{{forloop.counter}}">
+					<div class="card-body">
+						<h5 class="card-title">{{today.date}}</h5>
+						{% for task in today.daily_tasks.all %}
+						<p class="card-text">
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item {% if task.task_done %} bg-success {% endif %}">
+									{{task.task_name}}</li>
+							</ul>
+						</p>
+						{% endfor %}
 					</div>
 				</div>
-			{% endfor %}
+			</div>
+			{% endif %}
 		</div>
 	</div>
 
@@ -70,7 +76,6 @@
 						<ul class="list-group list-group-flush">
 							<li class="list-group-item"><b>Priorty</b>: {{goal.priority}}</li>
 							<li class="list-group-item"><b>Reason</b>: {{goal.reason}}</li>
-							<li class="list-group-item"><b>Duration</b>: {{goal.duration}}</li>
 							<li class="list-group-item"><b>Information</b>: {{goal.informations}}</li>
 						</ul>
 					</p>
@@ -85,7 +90,8 @@
 		<h2>Tasks</h2>
 		<div class="row">
 			{% for task in tasks %}
-			<div id="task_{{task.id}}" class="card {% if task.task_done %} bg-success {% endif %}" style="width: 18rem; margin: 5px;">
+			<div id="task_{{task.id}}" class="card {% if task.task_done %} bg-success {% endif %}"
+				style="width: 18rem; margin: 5px;">
 				<!--card buttons -->
 				<div class="row" style="margin:5px;">
 					<!-- remove button -->
@@ -141,8 +147,6 @@
 				aria-expanded="false" aria-controls="multiCollapseExample1">Add Task</a>
 			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapseExample2"
 				aria-expanded="false" aria-controls="multiCollapseExample2">Add Goal</button>
-			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".multi-collapse"
-				aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Add Both</button>
 		</p>
 
 		<div class="row">
@@ -239,11 +243,6 @@
 										<label for="exampleFormControlInput1">Goal Reason</label>
 										<input class="form-control"
 											style="border:none; background-color:rgb(252, 235, 182);" name="reason">
-									</div>
-									<div class="form-group">
-										<label for="exampleFormControlTextarea1">Goal Duration</label>
-										<input class="form-control" value="1"
-											style="border:none; background-color:rgb(252, 235, 182);" name="duration">
 									</div>
 									<div class="form-group">
 										<label for="exampleFormControlInput1">Goal Information</label>

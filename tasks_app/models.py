@@ -5,7 +5,6 @@ class Goal(models.Model):
     name = models.CharField(max_length=200, null=True, unique=True) # not null
     priority = models.PositiveSmallIntegerField(blank=True)
     reason = models.CharField(max_length=200, blank=True)
-    duration = models.IntegerField(default=1)
     informations = models.CharField(max_length=200, blank=True)
 
 class Task(models.Model):

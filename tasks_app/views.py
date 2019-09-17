@@ -32,9 +32,9 @@ class TaskViewSet(viewsets.ModelViewSet):
 def home(request):
     tasks = Task.objects.all()
     days = Day.objects.all()
-    goals = Goal.objects.all()
-    print(goals)
-    return render(request, "home_tasks.html", {"tasks":tasks, "days":days, "goals":goals})
+    today = Day.objects.get_or_create(date=datetime.date.today())[0] 
+    goals = Goal.objects.all().order_by("priority")
+    return render(request, "home_tasks.html", {"tasks":tasks, "days":days, "goals":goals, "today":today})
 
 def add_task(request):
     if request.method == 'POST':
@@ -97,3 +97,8 @@ def remove_task_from_daily_tasks(request, task_id):
         day.daily_tasks.remove(task)
         day.save() # Django doesn’t hit the database until you explicitly call save().
         return redirect('/')             # Finally, redirect to the homepage.
+
+def history(request):
+    tasks = Task.objects.all()
+    days = Day.objects.all()
+    return render(request, "history.html", {"tasks":tasks, "days":days})

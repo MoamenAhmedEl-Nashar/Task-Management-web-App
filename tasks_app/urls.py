@@ -9,4 +9,5 @@ urlpatterns = [
     path('<int:task_id>/remove_task_from_daily_tasks/', views.remove_task_from_daily_tasks, name='remove_task_from_daily_tasks'),
     path('add_goal/', views.add_goal, name='add_goal'),
     path('<int:task_id>/task_done/', views.task_done, name='task_done'),
+    path('history/', views.history, name='history'),
 ]
