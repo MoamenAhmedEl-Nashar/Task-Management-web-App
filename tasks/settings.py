@@ -25,7 +25,7 @@ SECRET_KEY = '7xg0p(^=*%v&2)#z)x+6hb4^2ai%-cw)&_)ga0_24*(6!i&7#w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mo2men.pythonanywhere.com']
 
 
 # Application definition
