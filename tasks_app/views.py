@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User, Group
+from django.views import generic
 from rest_framework import viewsets
 import datetime
 from .models import *
@@ -102,3 +103,12 @@ def history(request):
     tasks = Task.objects.all()
     days = Day.objects.all()
     return render(request, "history.html", {"tasks":tasks, "days":days})
+
+class TaskListView(generic.ListView):
+    """
+    The generic view will query the database to get all records for 
+    the specified model (Task) then render a template located at 
+    templates/{tasks_app}/{task}_list.html
+    """
+    model = Task
+    # queryset = Task.objects.filter(title='war')[:5] # Get 5 tasks containing the title war
