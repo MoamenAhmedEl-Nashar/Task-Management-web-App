@@ -18,7 +18,7 @@
 <body>
 
 	<div class="alert alert-primary" style="text-align: center;">
-		<h1>Tasks App</h1>
+		<h1>Tasks App for {{user}}</h1>
 		<form action="history/" method='POST'>
 			{% csrf_token %}
 			<button type="submit" value="submit" style=" text-decoration: none;" class="btn btn-link">history</button>
@@ -127,6 +127,7 @@
 					<h5 class="card-title">{{task.task_name}}</h5>
 					<p class="card-text">
 						<ul class="list-group list-group-flush">
+		
 							<li class="list-group-item"><b>Goal</b>: {{task.task_goal}}</li>
 							<li class="list-group-item"><b>Priorty</b>: {{task.task_priority}}</li>
 							<li class="list-group-item"><b>Reason</b>: {{task.task_reason}}</li>

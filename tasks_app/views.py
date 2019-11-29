@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User, Group
 from django.views import generic
 from rest_framework import viewsets
+from django.contrib.auth.mixins import LoginRequiredMixin
 import datetime
 from .models import *
 from .forms import *
@@ -31,7 +32,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
 
 def home(request):
-    tasks = Task.objects.all()
+    tasks = Task.objects.filter(task_user=request.user)
     days = Day.objects.all()
     today = Day.objects.get_or_create(date=datetime.date.today())[0] 
     goals = Goal.objects.all().order_by("priority")
@@ -42,7 +43,7 @@ def add_task(request):
         # Create a form instance and populate it with data from the request (binding):
         form = TaskForm(request.POST)
         if form.is_valid():
-            form.save()
+            form.save_user(request)
         else:
             print("form not valid")
             print(form.errors)
@@ -104,11 +105,14 @@ def history(request):
     days = Day.objects.all()
     return render(request, "history.html", {"tasks":tasks, "days":days})
 
-class TaskListView(generic.ListView):
+class TaskListView(LoginRequiredMixin, generic.ListView):
     """
+    **Multiple inheritance**
     The generic view will query the database to get all records for 
     the specified model (Task) then render a template located at 
     templates/{tasks_app}/{task}_list.html
     """
     model = Task
-    # queryset = Task.objects.filter(title='war')[:5] # Get 5 tasks containing the title war
+    #queryset = Task.objects.filter(task_user=self.request.user)# Get tasks for that user
+    def get_queryset(self):
+        return Task.objects.filter(task_user=self.request.user)

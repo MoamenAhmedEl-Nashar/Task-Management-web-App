@@ -10,6 +10,5 @@ urlpatterns = [
     path('add_goal/', views.add_goal, name='add_goal'),
     path('<int:task_id>/task_done/', views.task_done, name='task_done'),
     path('history/', views.history, name='history'),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('tasks_list/', views.TaskListView.as_view(), name='tasks_list')
 ]
