@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User, Group
 from django.views import generic
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
 from rest_framework import viewsets
 from django.contrib.auth.mixins import LoginRequiredMixin
 import datetime
@@ -32,7 +34,10 @@ class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
 
 def home(request):
-    tasks = Task.objects.filter(task_user=request.user)
+    try:
+        tasks = Task.objects.filter(task_user=request.user)
+    except: # if no logged user
+        tasks = []
     days = Day.objects.all()
     today = Day.objects.get_or_create(date=datetime.date.today())[0] 
     goals = Goal.objects.all().order_by("priority")
@@ -116,3 +121,8 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     #queryset = Task.objects.filter(task_user=self.request.user)# Get tasks for that user
     def get_queryset(self):
         return Task.objects.filter(task_user=self.request.user)
+
+class SignUpPage(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'signup.html'

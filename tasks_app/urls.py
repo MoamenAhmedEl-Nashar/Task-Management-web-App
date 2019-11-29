@@ -10,5 +10,6 @@ urlpatterns = [
     path('add_goal/', views.add_goal, name='add_goal'),
     path('<int:task_id>/task_done/', views.task_done, name='task_done'),
     path('history/', views.history, name='history'),
-    path('tasks_list/', views.TaskListView.as_view(), name='tasks_list')
+    path('tasks_list/', views.TaskListView.as_view(), name='tasks_list'),
+    path('signup_page/', views.SignUpPage.as_view(), name='signup_page')
 ]
