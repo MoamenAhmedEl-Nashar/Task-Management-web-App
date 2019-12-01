@@ -1,10 +1,49 @@
-{% block title %}Sign Up{% endblock %}
+<!doctype html>
+<html lang="en">
 
-{% block content %}
-  <h2>Sign up</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign up</button>
-  </form>
-{% endblock %}
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<!-- jQuery CDN from google !-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+	<title>Sign up</title>
+</head>
+
+<body>
+	{% block content %}
+	<h3>Sign Up</h3>
+	<div class="alert">
+	<form method="post">
+		{% csrf_token %}
+		{% for field in form %}
+			<div class="form-group">
+				<label>{{ field.label }}</label>
+				<input class="form-control" {{ field }}/>
+				{% if field.help_text %}
+					<small id="helpId" class="form-text text-muted">{{ field.help_text }}</small>
+				{% endif %}
+				{{ field.errors }}
+			</div>
+		{% endfor %}
+		<button class="btn btn-primary" type="submit">Sign up</button>
+	</form>
+	</div>
+	{% endblock %}
+
+
+
+</body>
+
+
+
+	<!-- Optional JavaScript -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</html>
